@@ -33,7 +33,7 @@ const Tasks: React.FC<Props> = ({ taskList }) => {
         ) : (
           <Container className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
             {taskList.map((task) => (
-              <Task key={task.id} title={task.title} description={task.description} />
+              <Task key={task.id} id={task.id} title={task.title} description={task.description} />
             ))}
           </Container>
         )}

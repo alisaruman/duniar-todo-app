@@ -4,18 +4,24 @@ import Button from "./UI/Button";
 import Container from "./UI/Container";
 import Input from "./UI/Input";
 import TextArea from "./UI/TextArea";
-import Tasks from "./Tasks/Tasks";
 import Modal from "./UI/Modal";
+import { useAppSelector, useAppDispatch } from "../store";
+import { useParams, useNavigate } from "react-router-dom";
 import { taskActions } from "../store/task-slice";
-import { useAppDispatch, useAppSelector } from "../store";
 
-const HomePage = () => {
-  const [taskTitle, setTaskTitle] = useState<string>("");
-  const [taskDescription, setTaskDescription] = useState<string>("");
+const EditTask = () => {
   const dispatch = useAppDispatch();
-
-  const taskList = useAppSelector((state) => state.tasks);
-  console.log(taskList);
+  const navigate = useNavigate();
+  const { id } = useParams<{ id?: string }>();
+  const taskId = id ? parseInt(id) : "";
+  const singleTask = useAppSelector((state) => state.tasks).filter(
+    (task) => task.id === taskId
+  );
+  console.log(singleTask);
+  const [taskTitle, setTaskTitle] = useState(singleTask[0].title);
+  const [taskDescription, setTaskDescription] = useState(
+    singleTask[0].description
+  );
 
   const submitHandler = (e: ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -25,13 +31,13 @@ const HomePage = () => {
       ).showModal();
     } else {
       dispatch(
-        taskActions.addTask({
+        taskActions.editTask({
+          id: taskId,
           title: taskTitle,
           description: taskDescription,
         })
       );
-      setTaskTitle('');
-      setTaskDescription('');
+      navigate("/");
     }
   };
 
@@ -44,9 +50,7 @@ const HomePage = () => {
       />
       <Header />
       <Container>
-        <h2 className="text-black font-semibold text-2xl py-5">
-          Add a new Task
-        </h2>
+        <h2 className="text-black font-semibold text-2xl py-5">Edit Task</h2>
         <form onSubmit={submitHandler}>
           <Input
             placeholder="Title"
@@ -58,12 +62,11 @@ const HomePage = () => {
             value={taskDescription}
             onChange={(e) => setTaskDescription(e.target.value)}
           />
-          <Button iconClass="icon-plus">Add</Button>
+          <Button iconClass="icon-edit invert">Edit</Button>
         </form>
       </Container>
-      <Tasks taskList={taskList} />
     </>
   );
 };
 
-export default HomePage;
+export default EditTask;

@@ -20,6 +20,14 @@ const taskSlice = createSlice({
         description: action.payload.description,
       });
     },
+    editTask(state, action) {
+      state.forEach((task) => {
+        if (task.id === action.payload.id) {
+          task.title = action.payload.title;
+          task.description = action.payload.description;
+        }
+      });
+    },
   },
 });
 
