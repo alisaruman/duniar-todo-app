@@ -1,12 +1,14 @@
-import React from 'react';
-import Header from './components/Header/Header';
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import HomePage from "./components/Home";
 
-import './App.css';
-
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <HomePage />,
+  },
+]);
 function App() {
-  return (
-    <Header />
-  );
+  return <RouterProvider router={router} />;
 }
 
 export default App;

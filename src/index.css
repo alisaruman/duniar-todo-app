@@ -18,6 +18,15 @@ i[class*="icon-"] {
 }
 
 .icon-chevron-right {
-  background-image: url('../public/icons/chevron-right.svg');
+  background-image: url('../public/icons/icon-chevron-right.svg');
 }
+
+.icon-plus {
+  background-image: url('../public/icons/icon-plus.svg');
+}
+
+.icon-edit {
+  background-image: url('../public/icons/icon-edit.svg');
+}
+
 /* icons */
