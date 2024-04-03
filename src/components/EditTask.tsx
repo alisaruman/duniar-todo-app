@@ -64,7 +64,7 @@ const EditTask = () => {
         title="Whoops!"
         description="Title or description is empty. check your values before editing task."
       />
-      <Header />
+      <Header title="Edit" />
       <Container>
         <h2 className="text-black font-semibold text-2xl py-5">Edit Task</h2>
         <form onSubmit={submitHandler}>

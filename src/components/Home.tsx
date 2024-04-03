@@ -44,7 +44,7 @@ const HomePage = () => {
         title="Whoops!"
         description="Title or description is empty. check your values before adding new task."
       />
-      <Header />
+      <Header title="Home" />
       <Container>
         <h2 className="text-black font-semibold text-2xl py-5">
           Add a new Task
