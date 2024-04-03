@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useState } from "react";
+import React, { ChangeEvent, useState, useEffect } from "react";
 import Header from "./Header/Header";
 import Button from "./UI/Button";
 import Container from "./UI/Container";
@@ -26,9 +26,16 @@ const EditTask = () => {
     singleTask[0].description
   );
   const [status, setStatus] = useState<TaskStatus>(singleTask[0].status);
+  const [previousStatus, setPreviousStatus] = useState<TaskStatus | null>(null);
+  const [nextStatus, setNextStatus] = useState<TaskStatus | null>(null);
 
-  const previousStatus = statusTransitions[status][0];
-  const nextStatus = statusTransitions[status][1];
+  // const previousStatus = statusTransitions[status][0];
+  // const nextStatus = statusTransitions[status][1];
+
+  useEffect(() => {
+      setPreviousStatus(statusTransitions[status][0]);
+      setNextStatus(statusTransitions[status][1]);
+  }, []);
 
   const handleStatusChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setStatus(e.target.value as TaskStatus);
@@ -86,11 +93,13 @@ const EditTask = () => {
             {previousStatus && (
               <option value={previousStatus}>{previousStatus}</option>
             )}
-            <option value={status}>{status}</option>
             {nextStatus && <option value={nextStatus}>{nextStatus}</option>}
           </select>
           {singleTask[0].history.map((singleHistory) => (
-            <p className="italic mb-2 text-darkGray1">Status changed from {singleHistory.from} to {singleHistory.to} at {singleHistory.timestamp}</p>
+            <p className="italic mb-2 text-darkGray1">
+              Status changed from {singleHistory.from} to {singleHistory.to} at{" "}
+              {singleHistory.timestamp}
+            </p>
           ))}
           <Button iconClass="icon-edit invert">Edit</Button>
         </form>
