@@ -7,7 +7,11 @@ import TextArea from "./UI/TextArea";
 import Modal from "./UI/Modal";
 import { useAppSelector, useAppDispatch } from "../store";
 import { useParams, useNavigate } from "react-router-dom";
-import { taskActions } from "../store/task-slice";
+import {
+  taskActions,
+  TaskStatus,
+  statusTransitions,
+} from "../store/task-slice";
 
 const EditTask = () => {
   const dispatch = useAppDispatch();
@@ -22,6 +26,15 @@ const EditTask = () => {
   const [taskDescription, setTaskDescription] = useState(
     singleTask[0].description
   );
+  const [status, setStatus] = useState<TaskStatus>(singleTask[0].status);
+
+  const previousStatus = statusTransitions[status][0];
+  const nextStatus = statusTransitions[status][1];
+
+
+  const handleStatusChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setStatus(e.target.value as TaskStatus);
+  };
 
   const submitHandler = (e: ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -35,6 +48,7 @@ const EditTask = () => {
           id: taskId,
           title: taskTitle,
           description: taskDescription,
+          status,
         })
       );
       navigate("/");
@@ -46,7 +60,7 @@ const EditTask = () => {
       <Modal
         id="homePageModal"
         title="Whoops!"
-        description="Title or description is empty. check your values before adding new task."
+        description="Title or description is empty. check your values before editing task."
       />
       <Header />
       <Container>
@@ -62,6 +76,15 @@ const EditTask = () => {
             value={taskDescription}
             onChange={(e) => setTaskDescription(e.target.value)}
           />
+          <select value={status} onChange={handleStatusChange} className="select select-bordered w-full text-xl mb-5">
+            {previousStatus && (
+              <option value={previousStatus}>{previousStatus}</option>
+            )}
+            <option value={status}>{status}</option>
+            {nextStatus && (
+              <option value={nextStatus}>{nextStatus}</option>
+            )}
+          </select>
           <Button iconClass="icon-edit invert">Edit</Button>
         </form>
       </Container>

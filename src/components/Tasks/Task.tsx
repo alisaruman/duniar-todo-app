@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 interface propsValues {
   id: number;
+  status: string;
   title: string;
   description: string;
 }
@@ -21,7 +22,7 @@ const Task = (props: propsValues) => {
         {props.description}
       </p>
       <div className="w-full flex items-center justify-between gap-3">
-        <button className="btn btn-primary px-8 font-semibold text-base">Todo</button>
+        <button className="btn btn-primary px-8 font-semibold text-base">{props.status}</button>
         <i className="icon-edit w-7 h-7 cursor-pointer" onClick={editHandler}></i>
       </div>
     </div>
