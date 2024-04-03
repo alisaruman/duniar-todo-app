@@ -6,7 +6,7 @@ import Input from "./UI/Input";
 import TextArea from "./UI/TextArea";
 import Tasks from "./Tasks/Tasks";
 import Modal from "./UI/Modal";
-import { taskActions } from "../store/task-slice";
+import { TaskStatus, taskActions } from "../store/task-slice";
 import { useAppDispatch, useAppSelector } from "../store";
 
 const HomePage = () => {
@@ -15,7 +15,6 @@ const HomePage = () => {
   const dispatch = useAppDispatch();
 
   const taskList = useAppSelector((state) => state.tasks);
-  console.log(taskList);
 
   const submitHandler = (e: ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -28,6 +27,9 @@ const HomePage = () => {
         taskActions.addTask({
           title: taskTitle,
           description: taskDescription,
+          history: [],
+          id: 0,
+          status: TaskStatus.todo,
         })
       );
       setTaskTitle('');

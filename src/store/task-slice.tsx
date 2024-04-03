@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export enum TaskStatus {
   blocked = "Blocked",
@@ -17,11 +17,18 @@ export const statusTransitions: Record<TaskStatus, TaskStatus[]> = {
   [TaskStatus.done]: [TaskStatus.deployed, TaskStatus.inqa],
   [TaskStatus.deployed]: [TaskStatus.done],
 };
+
+interface TaskStatusHistory {
+  from: TaskStatus;
+  to: TaskStatus;
+  timestamp: string;
+}
 interface Task {
   id: number;
   status: TaskStatus;
   title: string;
   description: string;
+  history: TaskStatusHistory[];
 }
 
 const initialState: Task[] = [];
@@ -30,23 +37,43 @@ const taskSlice = createSlice({
   name: "tasks",
   initialState,
   reducers: {
-    addTask(state, action) {
+    addTask(state, action: PayloadAction<Task>) {
       const { title, description } = action.payload;
       const lastTask = state[state.length - 1];
       const id = lastTask ? lastTask.id + 1 : 0;
       state.push({
         id,
-        status: TaskStatus.todo, // Default status when adding a task
+        status: TaskStatus.todo,
         title,
         description,
+        history: [],
       });
     },
     editTask(state, action) {
       const { id, title, description, status } = action.payload;
       const task = state.find((task) => task.id === id);
+      const currentdate = new Date();
+      const datetime =
+        currentdate.getDate() +
+        "/" +
+        (currentdate.getMonth() + 1) +
+        "/" +
+        currentdate.getFullYear() +
+        " @ " +
+        currentdate.getHours() +
+        ":" +
+        currentdate.getMinutes() +
+        ":" +
+        currentdate.getSeconds();
+
       if (task) {
         task.title = title;
         task.description = description;
+        task.history.push({
+          from: task.status,
+          to: status,
+          timestamp: datetime,
+        });
         task.status = status;
       }
     },

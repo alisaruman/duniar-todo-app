@@ -12,6 +12,7 @@ module.exports = {
       },
       borderColor: {
         darkBlue1: "#2b74ba",
+        darkGray1: "#6b6a6a",
       },
       container: {
         padding: {

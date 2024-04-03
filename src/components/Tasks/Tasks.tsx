@@ -1,7 +1,5 @@
-import React, { useEffect } from "react";
+import React from "react";
 import Container from "../UI/Container";
-import { useSelector } from "react-redux";
-import { taskState } from "../../store/task-slice";
 import Task from "./Task";
 
 interface TaskInterface {

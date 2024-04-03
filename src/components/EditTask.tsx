@@ -21,7 +21,6 @@ const EditTask = () => {
   const singleTask = useAppSelector((state) => state.tasks).filter(
     (task) => task.id === taskId
   );
-  console.log(singleTask);
   const [taskTitle, setTaskTitle] = useState(singleTask[0].title);
   const [taskDescription, setTaskDescription] = useState(
     singleTask[0].description
@@ -31,9 +30,12 @@ const EditTask = () => {
   const previousStatus = statusTransitions[status][0];
   const nextStatus = statusTransitions[status][1];
 
-
   const handleStatusChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setStatus(e.target.value as TaskStatus);
+  };
+
+  const cancelHandler = () => {
+    navigate("/");
   };
 
   const submitHandler = (e: ChangeEvent<HTMLFormElement>) => {
@@ -76,17 +78,28 @@ const EditTask = () => {
             value={taskDescription}
             onChange={(e) => setTaskDescription(e.target.value)}
           />
-          <select value={status} onChange={handleStatusChange} className="select select-bordered w-full text-xl mb-5">
+          <select
+            value={status}
+            onChange={handleStatusChange}
+            className="select select-bordered w-full text-xl mb-5"
+          >
             {previousStatus && (
               <option value={previousStatus}>{previousStatus}</option>
             )}
             <option value={status}>{status}</option>
-            {nextStatus && (
-              <option value={nextStatus}>{nextStatus}</option>
-            )}
+            {nextStatus && <option value={nextStatus}>{nextStatus}</option>}
           </select>
+          {singleTask[0].history.map((singleHistory) => (
+            <p className="italic mb-2 text-darkGray1">Status changed from {singleHistory.from} to {singleHistory.to} at {singleHistory.timestamp}</p>
+          ))}
           <Button iconClass="icon-edit invert">Edit</Button>
         </form>
+        <button
+          className="btn hover:bg-gray-200 text-darkGray1 w-full h-auto mt-5 border border-darkGray1 py-5 gap-3 text-base"
+          onClick={cancelHandler}
+        >
+          Cancel
+        </button>
       </Container>
     </>
   );
