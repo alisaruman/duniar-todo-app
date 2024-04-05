@@ -27,17 +27,20 @@ const EditTask = () => {
   );
   const [status, setStatus] = useState<TaskStatus>(singleTask[0].status);
   const [previousStatus, setPreviousStatus] = useState<TaskStatus | null>(null);
+  const [statusIsChanged, setStatusIsChanged] = useState(true);
   const [nextStatus, setNextStatus] = useState<TaskStatus | null>(null);
 
   // const previousStatus = statusTransitions[status][0];
   // const nextStatus = statusTransitions[status][1];
 
   useEffect(() => {
-      setPreviousStatus(statusTransitions[status][0]);
-      setNextStatus(statusTransitions[status][1]);
+    setPreviousStatus(statusTransitions[status][0]);
+    setNextStatus(statusTransitions[status][1]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleStatusChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setStatusIsChanged(false);
     setStatus(e.target.value as TaskStatus);
   };
 
@@ -93,14 +96,19 @@ const EditTask = () => {
             {previousStatus && (
               <option value={previousStatus}>{previousStatus}</option>
             )}
+            {statusIsChanged && <option value={status}>{status}</option>}
             {nextStatus && <option value={nextStatus}>{nextStatus}</option>}
           </select>
-          {singleTask[0].history.map((singleHistory) => (
-            <p className="italic mb-2 text-darkGray1">
-              Status changed from {singleHistory.from} to {singleHistory.to} at{" "}
-              {singleHistory.timestamp}
-            </p>
-          ))}
+          {singleTask[0].history.map((singleHistory) => {
+            if (singleHistory.from !== singleHistory.to) {
+              return (
+                <p className="italic mb-2 text-darkGray1">
+                  Status changed from {singleHistory.from} to {singleHistory.to}{" "}
+                  at {singleHistory.timestamp}
+                </p>
+              );
+            }
+          })}
           <Button iconClass="icon-edit invert">Edit</Button>
         </form>
         <button
